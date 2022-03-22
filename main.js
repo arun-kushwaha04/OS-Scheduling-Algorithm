@@ -123,6 +123,7 @@ const updateProblem = () => {
 const table = document.querySelector(".table");
 const fcfsFunction = () => {
     let currentTime = currentProblem[0].arrvialTime;
+    console.log(currentTime);
     updateGrantChart(contextSwitching, "#fff", currentTime);
     currentTime += contextSwitching;
     currentProblem.forEach((element, idx) => {
@@ -454,7 +455,11 @@ document.querySelector("#createTable").addEventListener("click", () => {
     while (grantChart.childElementCount > 0)
         grantChart.removeChild(grantChart.children[0]);
     let algo = document.querySelector("#algo").value;
-    console.log(algo);
+    if (document.querySelector("#problem1").value == true) {
+        currentProblem = firstProblem;
+    } else {
+        currentProblem = secondProblem;
+    }
     if (algo == "FCFS") fcfsFunction();
     else if (algo == "SJF") sjfFunction();
     else if (algo == "PSA") pjfFunction();
