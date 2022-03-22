@@ -10,6 +10,17 @@ html {
     font-size: 14px;
 }
 
+body {
+    position: relative;
+}
+
+img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+}
+
 .header,
 .footer {
     height: 5vh;
