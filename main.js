@@ -410,6 +410,65 @@ const ppjfFunction = () => {
     }
 };
 
+const rrsFunction = () => {
+    let element = currentProblem[0];
+    let i = element.arrvialTime;
+    updateGrantChart(contextSwitching, "#fff", i);
+    let totalTime = 0;
+    currentProblem.forEach((ele) => (totalTime += ele.estimatedCPUBrustTime));
+    totalTime += contextSwitching;
+    i += contextSwitching;
+    while (i < totalTime || element.remainingCPUBrustTime > 0) {
+        if (element.estimatedCPUBrustTime == element.remainingCPUBrustTime)
+            currentProblem[element.index].responseTime =
+            i - element.arrvialTime;
+        let temp = Math.min(
+            timeQuanta,
+            currentProblem[element.index].remainingCPUBrustTime
+        );
+        currentProblem[element.index].remainingCPUBrustTime -= temp;
+
+        if (currentProblem[element.index].remainingCPUBrustTime === 0) {
+            const row = document.createElement("tr");
+            let CT = i + temp;
+            currentProblem[element.index].waitingTime =
+                CT - element.arrvialTime - element.estimatedCPUBrustTime;
+            currentProblem[element.index].turnAroundTime =
+                CT - element.arrvialTime;
+            row.innerHTML = `
+   <td>${element.processName}</td>
+   <td>${element.arrvialTime}</td>
+   <td>${element.estimatedCPUBrustTime}</td>
+   <td>${CT}</td>
+   <td>${CT - element.arrvialTime}</td>
+   <td>${CT - element.arrvialTime - element.estimatedCPUBrustTime}</td>
+   <td>${currentProblem[element.index].responseTime}</td>
+  `;
+            table.appendChild(row);
+        }
+        updateGrantChart(temp, element.color, i);
+        i += temp;
+        let count = 0;
+        let k = element.index + 1;
+        if (k == currentProblem.length) k = 0;
+        while (count < currentProblem.length) {
+            if (
+                currentProblem[k].remainingCPUBrustTime != 0 &&
+                k != element.index
+            ) {
+                element = currentProblem[k];
+                updateGrantChart(contextSwitching, "#fff", i);
+                i += contextSwitching;
+                break;
+            } else {
+                count++;
+                k++;
+                if (k == currentProblem.length) k = 0;
+            }
+        }
+    }
+};
+
 currentProblem = JSON.parse(JSON.stringify(firstProblem));
 contextSwitching = 0;
 updateProblem();
@@ -456,6 +515,8 @@ document.querySelector("#problem2").addEventListener("click", () => {
     updateProblem();
 });
 
+let timeQuanta = 4;
+
 document.querySelector("#createTable").addEventListener("click", () => {
     while (table.childElementCount > 1) table.removeChild(table.children[1]);
     while (grantChart.childElementCount > 0)
@@ -474,6 +535,7 @@ document.querySelector("#createTable").addEventListener("click", () => {
     else if (algo == "SJF") sjfFunction();
     else if (algo == "PSA") pjfFunction();
     else if (algo == "PSJF") psjfFunction();
-    else ppjfFunction();
+    else if (algo == "PPSA") ppjfFunction();
+    else rrsFunction();
     calculateAverage();
 });
