@@ -184,6 +184,30 @@ const sjfFunction = () => {
         let CT = currentTime + element.estimatedCPUBrustTime;
         if (element.arrvialTime + element.estimatedCPUBrustTime > CT)
             CT = element.arrvialTime + element.estimatedCPUBrustTime;
+
+        currentProblem[element.index].waitingTime =
+            CT - element.arrvialTime - element.estimatedCPUBrustTime;
+        currentProblem[element.index].turnAroundTime = CT - element.arrvialTime;
+        currentProblem[element.index].responseTime =
+            CT - element.arrvialTime - element.estimatedCPUBrustTime;
+        row.innerHTML = `
+   <td>${element.processName}</td>
+   <td>${element.arrvialTime}</td>
+   <td>${element.estimatedCPUBrustTime}</td>
+   <td>${CT}</td>
+   <td>${CT - element.arrvialTime}</td>
+   <td>${CT - element.arrvialTime - element.estimatedCPUBrustTime}</td>
+   <td>${CT - element.arrvialTime - element.estimatedCPUBrustTime}</td>
+  `;
+        table.appendChild(row);
+        currentTime = CT;
+        updateGrantChart(
+            element.estimatedCPUBrustTime,
+            element.color,
+            currentTime - element.remainingCPUBrustTime
+        );
+        currentProblem[element.index].remainingCPUBrustTime = 0;
+
         for (let i = 0; i < currentProblem.length; i++) {
             if (currentProblem[i].remainingCPUBrustTime == 0) continue;
             if (currentTime < currentProblem[i].arrvialTime) break;
@@ -206,6 +230,22 @@ const sjfFunction = () => {
                 CT = element.arrvialTime + element.estimatedCPUBrustTime;
             updateGrantChart(contextSwitching, "#fff", currentTime - 1);
         }
+    });
+};
+
+const pjfFunction = () => {
+    updateGrantChart(contextSwitching, "#fff", 0);
+    let element = currentProblem[0];
+    let currentTime = element.arrvialTime;
+    currentTime += contextSwitching;
+    updateGrantChart(contextSwitching, "#fff", currentTime - 1);
+    currentProblem.forEach(() => {
+        const row = document.createElement("tr");
+        let newElement;
+        let CT = currentTime + element.estimatedCPUBrustTime;
+        if (element.arrvialTime + element.estimatedCPUBrustTime > CT)
+            CT = element.arrvialTime + element.estimatedCPUBrustTime;
+
         currentProblem[element.index].waitingTime =
             CT - element.arrvialTime - element.estimatedCPUBrustTime;
         currentProblem[element.index].turnAroundTime = CT - element.arrvialTime;
@@ -228,21 +268,7 @@ const sjfFunction = () => {
             currentTime - element.remainingCPUBrustTime
         );
         currentProblem[element.index].remainingCPUBrustTime = 0;
-    });
-};
 
-const pjfFunction = () => {
-    updateGrantChart(contextSwitching, "#fff", 0);
-    let element = currentProblem[0];
-    let currentTime = element.arrvialTime;
-    currentTime += contextSwitching;
-    updateGrantChart(contextSwitching, "#fff", currentTime - 1);
-    currentProblem.forEach(() => {
-        const row = document.createElement("tr");
-        let newElement;
-        let CT = currentTime + element.estimatedCPUBrustTime;
-        if (element.arrvialTime + element.estimatedCPUBrustTime > CT)
-            CT = element.arrvialTime + element.estimatedCPUBrustTime;
         for (let i = 0; i < currentProblem.length; i++) {
             if (currentProblem[i].remainingCPUBrustTime == 0) continue;
             if (currentTime < currentProblem[i].arrvialTime) break;
@@ -262,28 +288,6 @@ const pjfFunction = () => {
                 CT = element.arrvialTime + element.estimatedCPUBrustTime;
             updateGrantChart(contextSwitching, "#fff", currentTime - 1);
         }
-        currentProblem[element.index].waitingTime =
-            CT - element.arrvialTime - element.estimatedCPUBrustTime;
-        currentProblem[element.index].turnAroundTime = CT - element.arrvialTime;
-        currentProblem[element.index].responseTime =
-            CT - element.arrvialTime - element.estimatedCPUBrustTime;
-        row.innerHTML = `
-   <td>${element.processName}</td>
-   <td>${element.arrvialTime}</td>
-   <td>${element.estimatedCPUBrustTime}</td>
-   <td>${CT}</td>
-   <td>${CT - element.arrvialTime}</td>
-   <td>${CT - element.arrvialTime - element.estimatedCPUBrustTime}</td>
-   <td>${CT - element.arrvialTime - element.estimatedCPUBrustTime}</td>
-  `;
-        table.appendChild(row);
-        currentTime = CT;
-        updateGrantChart(
-            element.estimatedCPUBrustTime,
-            element.color,
-            currentTime - element.remainingCPUBrustTime
-        );
-        currentProblem[element.index].remainingCPUBrustTime = 0;
     });
 };
 
@@ -317,8 +321,11 @@ const psjfFunction = () => {
             }
             element = newElement;
         }
+        if (element.estimatedCPUBrustTime == element.remainingCPUBrustTime)
+            currentProblem[element.index].responseTime =
+            i - element.arrvialTime;
         currentProblem[element.index].remainingCPUBrustTime--;
-        console.log(currentProblem[element.index].remainingCPUBrustTime);
+
         if (currentProblem[element.index].remainingCPUBrustTime <= 0) {
             const row = document.createElement("tr");
             let CT = i + 1;
@@ -333,7 +340,7 @@ const psjfFunction = () => {
    <td>${CT}</td>
    <td>${CT - element.arrvialTime}</td>
    <td>${CT - element.arrvialTime - element.estimatedCPUBrustTime}</td>
-   <td>${CT - element.arrvialTime - element.estimatedCPUBrustTime}</td>
+   <td>${currentProblem[element.index].responseTime}</td>
   `;
             table.appendChild(row);
         }
