@@ -123,7 +123,6 @@ const updateProblem = () => {
 const table = document.querySelector(".table");
 const fcfsFunction = () => {
     let currentTime = currentProblem[0].arrvialTime;
-    console.log(currentTime);
     updateGrantChart(contextSwitching, "#fff", currentTime);
     currentTime += contextSwitching;
     currentProblem.forEach((element, idx) => {
@@ -404,7 +403,7 @@ const ppjfFunction = () => {
     }
 };
 
-currentProblem = firstProblem;
+currentProblem = JSON.parse(JSON.stringify(firstProblem));
 contextSwitching = 0;
 updateProblem();
 
@@ -439,13 +438,13 @@ const calculateAverage = () => {
 };
 
 document.querySelector("#problem1").addEventListener("click", () => {
-    currentProblem = firstProblem;
+    currentProblem = JSON.parse(JSON.stringify(firstProblem));
     contextSwitching = 0;
     updateProblem();
 });
 
 document.querySelector("#problem2").addEventListener("click", () => {
-    currentProblem = secondProblem;
+    currentProblem = JSON.parse(JSON.stringify(secondProblem));
     contextSwitching = 1;
     updateProblem();
 });
@@ -455,11 +454,15 @@ document.querySelector("#createTable").addEventListener("click", () => {
     while (grantChart.childElementCount > 0)
         grantChart.removeChild(grantChart.children[0]);
     let algo = document.querySelector("#algo").value;
-    if (document.querySelector("#problem1").value == true) {
-        currentProblem = firstProblem;
+    if (
+        document.querySelector('input[name="problem"]:checked').value ===
+        "first"
+    ) {
+        currentProblem = JSON.parse(JSON.stringify(firstProblem));
     } else {
-        currentProblem = secondProblem;
+        currentProblem = JSON.parse(JSON.stringify(secondProblem));
     }
+    console.log(currentProblem);
     if (algo == "FCFS") fcfsFunction();
     else if (algo == "SJF") sjfFunction();
     else if (algo == "PSA") pjfFunction();
