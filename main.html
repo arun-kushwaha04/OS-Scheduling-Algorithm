@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sheduling Algorithm</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
+</head>
+
+<body>
+    <div class="header">OS Process Scheduling Algorithm</div>
+    <div class="main-div">
+        <div class="left-div">
+            <h2 class="heading">Process</h2>
+            <div class="process-div">
+                <div class="problem-choice">
+                    <label for="problem1">Problem 1</label>
+                    <input type="radio" id="problem1" title="problem" name="problem" checked="true" />
+                    <label for="problem2">Problem 2</label>
+                    <input type="radio" id="problem2" title="problem" name="problem" />
+                </div>
+                <div class="process">
+                    <h4 class="process-name">Process Name</h4>
+                    <h4 class="process-arrival">Arrival Time</h4>
+                    <h4 class="process-time">Brust Time</h4>
+                    <h4 class="process-priority">Priority</h4>
+                </div>
+            </div>
+            <div class="select-div">
+                <label for="algo">Choose a Algorithm:</label>
+
+                <select name="Algorithm" id="algo">
+						<option value="FCFS">FCFS</option>
+						<option value="SJF">SJF</option>
+						<option value="PSA">PSA</option>
+						<option value="PSJF">PSJF</option>
+						<option value="PPSA">PPSA</option>
+					</select>
+            </div>
+            <button id="createTable">Plot Table</button>
+        </div>
+        <div class="center-div">
+            <!-- <div class="controls">
+                <div class="speed-control">
+                    <p>Animation Speed</p>
+                    <input type="number" min="0.25" max="3" step="0.25" placeholder="Choose Speed" value="1" />
+                </div>
+                <div class="play-pause">
+                    <i class="fa-solid fa-circle-play"></i>
+                    <i class="fa-solid fa-circle-pause"></i>
+                    <i class="fa-solid fa-circle-stop"></i>
+                </div>
+            </div> -->
+            <div class="table-div">
+                <table class="table">
+                    <tr>
+                        <th>Process Name</th>
+                        <th>Arrival Time</th>
+                        <th>CBT</th>
+                        <th>CT</th>
+                        <th>TAT</th>
+                        <th>WT</th>
+                        <th>RT</th>
+                    </tr>
+                </table>
+                <div class="calculation">
+                    <div>
+                        Average Waiting Time: <span class="awt">-</span>
+                    </div>
+                    <div>
+                        Average Response Time: <span class="art">-</span>
+                    </div>
+                    <div>Average TAT Time: <span class="att">-</span></div>
+                </div>
+            </div>
+            <div class="grant-chart">
+                <div class="grant-block"></div>
+            </div>
+        </div>
+        <!-- <div class="right-div">
+            <h2 class="heading">RAM</h2>
+            <div class="ram-block">
+                <div class="ram-process">P1</div>
+                <div class="ram-process">P2</div>
+            </div>
+        </div> -->
+    </div>
+    <div class="footer">
+        Made Using HTML-CSS-JS and ❤️ By Arun Singh Kushwaha (2020IMT016)
+    </div>
+</body>
+<script src="./main.js"></script>
+
+</html>
